@@ -1,4 +1,5 @@
 import sys
+import random
 
 class GridPos:
     '''
@@ -270,23 +271,173 @@ class Ship:
     
     def __str__(self):
         return self._ship
+    
+def rand_board(board):
+    #picks wheher x or y stays the same value
+    rand_v = random.randint(0, 2)
+    #x stays the same, y changes
+    if rand_v == 0:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (y + 4) > 9:
+            aShip = Ship('A', [x, y, x, (y - 4)])
+        elif (y - 4) < 9:
+            aShip = Ship('A', [x, y, x, (y + 4)])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                aShip = Ship('A', [x, y, x, (y - 4)])
+            else:
+                aShip = Ship('A', [x, y, x, (y + 4)])
+    #y changes, x stays the same
+    else:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (x + 4) > 9:
+            aShip = Ship('A', [x, y, (x - 4), y])
+        elif (x - 4) < 9:
+            aShip = Ship('A', [x, y, (x + 4), y])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                aShip = Ship('A', [x, y, (x - 4), y])
+            else:
+                aShip = Ship('A', [x, y, (x + 4), y])
+    board.add_ship(aShip)
+    rand_v = random.randint(0, 2)
+    if rand_v == 0:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (y + 3) > 9:
+            bShip = Ship('B', [x, y, x, (y - 3)])
+        elif (y - 3) < 9:
+            bShip = Ship('B', [x, y, x, (y + 3)])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                bShip = Ship('B', [x, y, x, (y - 3)])
+            else:
+                bShip = Ship('B', [x, y, x, (y + 3)])
+    else:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (x + 3) > 9:
+            bShip = Ship('B', [x, y, (x - 3), y])
+        elif (x - 3) < 9:
+            bShip = Ship('B', [x, y, (x + 3), y])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                bShip = Ship('B', [x, y, (x - 3), y])
+            else:
+                bShip = Ship('B', [x, y, (x + 3), y])
+    board.add_ship(bShip)
+    rand_v = random.randint(0, 2)
+    if rand_v == 0:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (y + 2) > 9:
+            sShip = Ship('S', [x, y, x, (y - 2)])
+        elif (y - 2) < 9:
+            sShip = Ship('S', [x, y, x, (y + 2)])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                sShip = Ship('S', [x, y, x, (y - 2)])
+            else:
+                sShip = Ship('S', [x, y, x, (y + 2)])
+    else:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (x + 2) > 9:
+            sShip = Ship('S', [x, y, (x - 2), y])
+        elif (x - 2) < 9:
+            sShip = Ship('S', [x, y, (x + 2), y])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                sShip = Ship('S', [x, y, (x - 2), y])
+            else:
+                sShip = Ship('S', [x, y, (x + 2), y])
+    board.add_ship(sShip)
+    rand_v = random.randint(0, 2)
+    if rand_v == 0:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (y + 2) > 9:
+            dShip = Ship('D', [x, y, x, (y - 2)])
+        elif (y - 2) < 9:
+            dShip = Ship('D', [x, y, x, (y + 2)])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                dShip = Ship('D', [x, y, x, (y - 2)])
+            else:
+                dShip = Ship('D', [x, y, x, (y + 2)])
+    else:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (x + 2) > 9:
+            dShip = Ship('D', [x, y, (x - 2), y])
+        elif (x - 2) < 9:
+            dShip = Ship('D', [x, y, (x + 2), y])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                dShip = Ship('D', [x, y, (x - 2), y])
+            else:
+                dShip = Ship('D', [x, y, (x + 2), y])
+    board.add_ship(dShip)
+    rand_v = random.randint(0, 2)
+    if rand_v == 0:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (y + 1) > 9:
+            pShip = Ship('P ', [x, y, x, (y - 1)])
+        elif (y - 1) < 9:
+            pShip = Ship('P', [x, y, x, (y + 1)])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                pShip = Ship('P', [x, y, x, (y - 1)])
+            else:
+                pShip = Ship('P', [x, y, x, (y + 1)])
+    else:
+        x = random.randint(0 , 10)
+        y = random.randint(0 , 10)
+        if (x + 1) > 9:
+            pShip = Ship('P', [x, y, (x - 1), y])
+        elif (x - 1) < 9:
+            pShip = Ship('P', [x, y, (x + 1), y])
+        else:
+            either = random.randint(0, 2)
+            if either == 0:
+                pShip = Ship('P', [x, y, (x - 1), y])
+            else:
+                pShip = Ship('P', [x, y, (x + 1), y])
+    board.add_ship(pShip)
 
 def main():
     player_board = Board()
-    aircraftcarrier = input()
+    ai_board = Board()
+    rand_board(ai_board) #randomly generates ships on a board for the pc the player plays against
+    aircraftcarrier = input('Aicraft carrier coordinates: ')
+    a = Ship('A', [aircraftcarrier[0], aircraftcarrier[1], aircraftcarrier[2], aircraftcarrier[3]])
     player_board.add_ship(a)
-    battleship = input()
+    battleship = input('Battleship coordinates: ')
+    b = Ship('B', [battleship[0], battleship[1], battleship[2], battleship[3]])
     player_board.add_ship(b)
-    s = Ship('A', [submarine[0], submarine[1], submarine[2], submarine[3]])
+    submarine = input('Submarine coordinates: ')
+    s = Ship('S', [submarine[0], submarine[1], submarine[2], submarine[3]])
     player_board.add_ship(s)
-    destroyer = input()
-    d = Ship('A', [destroyer[0], destroyer[1], destroyer[2], destroyer[3]])
+    destroyer = input('Destroyer coordinates: ')
+    d = Ship('D', [destroyer[0], destroyer[1], destroyer[2], destroyer[3]])
     player_board.add_ship(d)
-    patrolboat = input()
-    p = Ship('A', [patrolboat[0], patrolboat[1], patrolboat[2], patrolboat[3]])
+    patrolboat = input('Patrol Boat coordinates: ')
+    p = Ship('P', [patrolboat[0], patrolboat[1], patrolboat[2], patrolboat[3]])
     player_board.add_ship(p)
     while player_board.get_ships() > 0:
-        guess = input()
+        guess = input('Attack coordinates: ')
         positions = guess[0:]
         if len(positions) > 1:
             if int(positions[0]) > 9 or int(positions[0]) < 0 or int(positions[1]) > 9 or int(positions[1]) < 0:
