@@ -26,8 +26,8 @@ class GridPos:
     #returns the value of guess
     def get_guess(self):
         return self._guess
-
-    def __str__(self):
+    
+    def get_data(self):
         if self._ship != None:
             return self._ship.get_ship()
         elif self._guess == True:
@@ -52,7 +52,8 @@ class Board:
         self._ships.append(ship)
         list = ship.get_positions()
         for i in range(0, len(list), 2):
-            if self._board[(list[i + 1] * -1 + 9)][list[i]].get_ship() == None:
+            y = ship.get_positions()
+            if self._board[y[0]][y[1]].get_ship() == None:
                 self._board[(list[i + 1] * -1 + 9)][list[i]].set_ship(ship)
             else:
                 print('ERROR: overlapping ship: ' + ship.get_name() + ' ' + str(list[0]) + ' ' + str(list[1]) + ' ' + str(list[-2]) + ' ' + str(list[-1]))
@@ -68,25 +69,25 @@ class Board:
     def ship_colisions(self, positions):
         ai_board = self.get_board()
         if positions[0] == positions[2]:
-            if positions[0] < positions[2]:
-                for i in range(positions[1], positions[3]):
+            if positions[1] < positions[3]:
+                for i in range(positions[1], positions[3] + 1):
                     if ai_board[positions[0]][i].get_ship() != None:
                         return False
                 return True
             else:
-                for i in range(positions[3], positions[1], -1):
+                for i in range(positions[3], positions[1] + 1, -1):
                     if ai_board[positions[0]][i].get_ship() != None:
                         return False
                 return True
         else:
-            if positions[1] < positions[3]:
-                for i in range(positions[0], positions[2]):
+            if positions[0] < positions[2]:
+                for i in range(positions[0], positions[2] + 1):
                     if ai_board[i][positions[1]].get_ship() != None:
                         return False
                 return True
             else:
-                for i in range(positions[2], positions[0], -1):
-                    if ai_board[positions[1]][i].get_ship() != None:
+                for i in range(positions[2], positions[0] + 1, -1):
+                    if ai_board[i][positions[1]].get_ship() != None:
                         return False
                 return True
     
@@ -102,20 +103,24 @@ class Board:
                     if self.ship_colisions([((y * -1) + 9), x, (((y * -1) + 9) - len), x]):
                         ship = Ship(type, [((y * -1) + 9), x, (((y * -1) + 9) - len), x])
                         break
-                elif (((y * -1) + 9) - len) < 9:
+                    self.ship_values(type, len)
+                elif (((y * -1) + 9) - len) < 0:
                     if self.ship_colisions([((y * -1) + 9), x, (((y * -1) + 9) + len), x]):
                         ship = Ship(type, [((y * -1) + 9), x, (((y * -1) + 9) + len), x])
                         break
+                    self.ship_values(type, len)
                 else:
                     either = random.randint(0, 1)
                     if either == 0:
                         if self.ship_colisions([((y * -1) + 9), x, (((y * -1) + 9) - len), x]):
                             ship = Ship(type, [((y * -1) + 9), x, (((y * -1) + 9) - len), x])
                             break
+                        self.ship_values(type, len)
                     else:
                         if self.ship_colisions([((y * -1) + 9), x, (((y * -1) + 9) + len), x]):
                             ship = Ship(type, [((y * -1) + 9), x, (((y * -1) + 9) + len), x])
                             break
+                        self.ship_values(type, len)
         #y changes, x stays the same
         else:
             while coords != True:
@@ -125,7 +130,7 @@ class Board:
                     if self.ship_colisions([((y * -1) + 9), x, ((y * -1) + 9), (x - len)]):
                         ship = Ship(type, [((y * -1) + 9), x, ((y * -1) + 9), (x - len)])
                         break
-                elif (x - len) < 9:
+                elif (x - len) < 0:
                     if self.ship_colisions([((y * -1) + 9), x, ((y * -1) + 9), (x + len)]):
                         ship = Ship(type,([((y * -1) + 9), x, ((y * -1) + 9), (x + len)]))
                         break
@@ -142,34 +147,32 @@ class Board:
         self.add_ship(ship)
 
     def alive(self):
-        if self._board.get_ships() == 0:
+        if self.get_ships() == 0:
             return False
         return True
-
+    
     #guesses
     def guess(self, positions):
         position = self._board[(positions[1] * -1 + 9)][positions[0]]
-        if position.get_ship() != None:
-            if position.get_guess():
-                print('hit (again)')
-            else:
-                position.set_guess()
-                ship = position.get_ship()
-                ship.hit(positions)
+        if position.get_guess():
+            new_pos = input('Guess again: ')
+            pos = let_to_num(new_pos)
+            self.guess(pos)
+        else:
+            if position.get_ship() != None:
+                positions.set_guess()
                 if position.get_ship().is_sunk():
-                    print('{} sunk'.format(position.get_ship()))
                     self._ships.remove(position.get_ship())
                     if len(self._ships) == 0:
                         print('all ships sunk: game over')
-                else:
-                    print('hit')
-        else:
-            if position.get_guess():
-                print('miss (again)')
+                    else:
+                        print('{} sunk'.format(position.get_ship()))
+                next_pos = input('Hit, guess again: ')
+                next_vals = let_to_num(next_pos)
+                self.guess(next_vals)
             else:
-                position.set_guess()
-                print('miss')
-
+                print('Miss')
+        
     def get_board(self):
         return self._board
     
@@ -178,28 +181,30 @@ class Board:
         return len(self._ships)
     
     def __str__(self):
-        for i in range(len(self._board) - 1, - 1, - 1):
-            for ii in range(len(self._board[i])):
-                print(self._board[i][ii], end = ' ')
-            print()
+        string = ''
+        for i in range(len(self._board)):
+            for ii in range(len(self._board[i]) -1, -1, -1):
+                string += self._board[ii][i].get_data() + ' '
+            string += '\n'
+        return string
             
 class Ship:
     def __init__(self, ship, positions):
         self._ship = ship
         if self._ship == 'A':
-            self.create_ship(positions, 4)
+            self.create_ship(positions, 5)
         elif self._ship == 'B':
-            self.create_ship(positions, 3)
+            self.create_ship(positions, 4)
         elif self._ship == 'S':
-            self.create_ship(positions, 2)
+            self.create_ship(positions, 3)
         elif self._ship == 'D':
-            self.create_ship(positions, 2)
+            self.create_ship(positions, 3)
         else:
-            self.create_ship(positions, 1)
+            self.create_ship(positions, 2)
 
     def create_ship(self, positions, size):
             self._size = size
-            if self._size == 1:
+            if self._size == 2:
                 if positions[0] != positions[2] and positions[1] != positions[3]:
                     print('ERROR: ship not horizontal or vertical: ' + self._ship + ' ' + str(positions[0]) + ' ' + str(positions[1]) + ' ' + str(positions[2]) + ' ' + str(positions[3]))
                     sys.exit(0)
@@ -211,12 +216,11 @@ class Ship:
                     if abs(positions[1] - positions[3]) != 1:
                         print('ERROR: incorrect ship size: ' + self._ship + ' ' + str(positions[0]) + ' ' + str(positions[1]) + ' ' + str(positions[2]) + ' ' + str(positions[3]))
                         sys.exit(0)
-                self._size = 2
                 self._positions = [positions[0], positions[1], positions[2], positions[3]]
                 self._not_hit = self._positions
             else:
                 if positions[0] == positions[2]:
-                    if abs(positions[1] - positions[3]) != size:
+                    if abs(positions[1] - positions[3]) != size - 1:
                         print('ERROR: incorrect ship size: ' + self._ship + ' ' + ' ' + str(positions[0]) + ' ' + str(positions[1]) + ' ' + str(positions[2]) + ' ' + str(positions[3]))
                         sys.exit(0)
                     self._positions  = [positions[0], positions[1]]
@@ -231,7 +235,7 @@ class Ship:
                     self._positions.append(positions[2])
                     self._positions.append(positions[3])
                 elif positions[1] == positions[3]:
-                    if abs(positions[0] - positions[2]) != size:
+                    if abs(positions[0] - positions[2]) != size - 1:
                         print('ERROR: incorrect ship size: ' + self._ship + ' ' + str(positions[0]) + ' ' + str(positions[1]) + ' ' + str(positions[2]) + ' ' + str(positions[3]))
                         sys.exit(0)
                     self._positions = [positions[0], positions[1]]
@@ -305,7 +309,7 @@ def main():
     pPositions = let_to_num(patrolboat)
     p = Ship('P', [pPositions[0], pPositions[1], pPositions[2], pPositions[3]])
     player_board.add_ship(p)
-    print(player_board)
+    player_board
     while player_board.get_ships() > 0 and ai_board.alive():
         guess = input('Attack coordinates: ')
         positions = let_to_num(guess)
