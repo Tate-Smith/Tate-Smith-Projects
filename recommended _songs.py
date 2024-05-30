@@ -9,10 +9,14 @@ from spotipy.oauth2 import SpotifyOAuth
 #specifys the scope of what the program can access from the users profile
 scope = "user-top-read playlist-modify-private playlist-modify-public" 
 
+Client_ID = 'Your Client id'
+Client_secret = 'Your client secret'
+redirect_URI = 'your redirect URI'
+
 #creates access to the users profile and ability to retrieve data and modify it
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth('8fc5713557e44119a3f85f79a3958fba',
-                                               'a93989b09c4749eaac9239cb0ba2ffc0',
-                                               'http://localhost:1234',
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(Client_ID,
+                                               Client_Secret,
+                                               redirect_URI,
                                                scope=scope))
 
 #gets the surrent users id
