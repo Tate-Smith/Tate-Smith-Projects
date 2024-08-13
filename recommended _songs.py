@@ -1,5 +1,5 @@
 '''
-This program is supposed to acces the users profile information, find out its top artists/ genres of music, then it will create aplaylist
+This program is supposed to access the users profile information, find out its top artists/ genres of music, then it will create aplaylist
 of songs it recommends the user based on previous sound types
 '''
 
