@@ -1,8 +1,4 @@
 /*
- * Author: Tate Smith
- * Class: CSC210
- * Project: Gradenator
- * 
  * This project uses recursive backtracking to find
  * every possible combinations of anagrams in a given word.
  * The program prompts the user in the terminal in the format
