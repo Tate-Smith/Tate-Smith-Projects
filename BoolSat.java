@@ -1,7 +1,4 @@
 /*
- * Author: Tate Smith
- * Class: CSC210
- * Project: BoolSat
  * 
  * This project uses many different classes
  * to ultimately do the function of completing a logical expression
